@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <script>
+      // Silence benign Vite HMR websocket connection errors in AI Studio iframe environment where HMR is disabled
+      (function() {
+        function isViteMsg(arg) {
+          if (!arg) return false;
+          if (typeof arg === 'string') {
+            return arg.includes('[vite]') || arg.includes('websocket') || arg.includes('WebSocket');
+          }
+          if (typeof arg === 'object') {
+            const str = String(arg.message || arg.reason || arg.type || arg.name || '');
+            return str.includes('[vite]') || str.includes('websocket') || str.includes('WebSocket');
+          }
+          return false;
+        }
+
+        const originalConsoleError = console.error;
+        console.error = function(...args) {
+          if (args.some(isViteMsg)) {
+            return;
+          }
+          originalConsoleError.apply(console, args);
+        };
+
+        const originalConsoleWarn = console.warn;
+        console.warn = function(...args) {
+          if (args.some(isViteMsg)) {
+            return;
+          }
+          originalConsoleWarn.apply(console, args);
+        };
+
+        window.addEventListener('error', function(event) {
+          if (isViteMsg(event.message) || isViteMsg(event.error) || isViteMsg(event.filename)) {
+            event.preventDefault();
+            if (typeof event.stopImmediatePropagation === 'function') {
+              event.stopImmediatePropagation();
+            }
+          }
+        }, true);
+
+        window.addEventListener('unhandledrejection', function(event) {
+          if (isViteMsg(event.reason)) {
+            event.preventDefault();
+            if (typeof event.stopImmediatePropagation === 'function') {
+              event.stopImmediatePropagation();
+            }
+          }
+        }, true);
+
+        // Clear any old/stale Service Worker registrations in dev/preview that cause "Page not found"
+        if ('serviceWorker' in navigator && (window.location.hostname.includes('run.app') || window.location.hostname === 'localhost')) {
+          navigator.serviceWorker.getRegistrations().then(function(registrations) {
+            for (var i = 0; i < registrations.length; i++) {
+              registrations[i].unregister();
+            }
+          });
+        }
+      })();
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Partner</title>
+    <meta name="description" content="Premium Business Intelligence & Proactive Partner Advisor for Store Owners." />
+    <meta property="og:title" content="Partner" />
+    <meta property="og:description" content="Premium Business Intelligence & Proactive Partner Advisor for Store Owners." />
+    <meta name="theme-color" content="#000000" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Partner" />
+    <link rel="apple-touch-icon" href="https://picsum.photos/seed/partner/192/192" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+

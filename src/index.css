@@ -1,0 +1,355 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Sofia+Sans+Condensed:wght@400;500;600;700;800;900&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "San Francisco", "Inter", "Helvetica Neue", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "SF Pro Display", "Inter", sans-serif;
+  --font-luxury: "Sofia Sans Condensed", sans-serif;
+  
+  --radius-apple: 24px;
+  --radius-apple-lg: 32px;
+  --radius-apple-sm: 16px;
+  --radius-apple-xl: 48px;
+}
+
+@layer base {
+  body {
+    @apply bg-[#F5F5F7] text-[#1D1D1F] antialiased selection:bg-[#007AFF]/20 overflow-x-hidden;
+    font-feature-settings: "cv02", "cv03", "cv04", "ss01";
+  }
+}
+
+@layer components {
+  .glass {
+    @apply bg-white/70 backdrop-blur-[10px] border border-white/20 shadow-[0_4px_16px_rgba(0,0,0,0.03)];
+  }
+  
+  .apple-card {
+    @apply bg-white/80 backdrop-blur-md rounded-[24px] border border-white/30 shadow-[0_2px_8px_rgba(0,0,0,0.02)] transition-all duration-500 hover:shadow-[0_12px_24px_rgba(0,0,0,0.04)] hover:translate-y-[-2px];
+  }
+
+  /* 3D Tactile Button Base - Keep as utility for JSX usage if needed, but don't @apply it */
+  .tactile-button {
+    @apply relative overflow-hidden transition-all duration-200 active:scale-[0.98] active:translate-y-[1px];
+    box-shadow: 
+      0 2px 4px -1px rgba(0, 0, 0, 0.06),
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.3);
+  }
+
+  .apple-button-primary {
+    @apply bg-[#007AFF] text-white font-bold rounded-xl px-5 py-3 shadow-[0_6px_12px_rgba(0,122,255,0.15)] active:scale-[0.98] transition-all duration-300 hover:bg-[#0071E3] hover:shadow-[0_8px_20px_rgba(0,122,255,0.25)] disabled:opacity-50 disabled:pointer-events-none;
+    @apply relative transition-all duration-200 active:translate-y-[1px];
+    box-shadow: 
+      0 6px 12px rgba(0, 122, 255, 0.15),
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.2);
+  }
+
+  .checkout-pulse {
+    animation: luxury-pulse 3s infinite ease-in-out;
+  }
+
+  .partner-breathing {
+    animation: partner-breathing 4s infinite ease-in-out;
+  }
+
+  @keyframes partner-breathing {
+    0%, 100% { 
+      transform: scale(1); 
+      box-shadow: 0 15px 35px rgba(0, 85, 255, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.3);
+    }
+    50% { 
+      transform: scale(1.02); 
+      box-shadow: 0 25px 50px rgba(0, 85, 255, 0.5), inset 0 1px 2px rgba(255, 255, 255, 0.4);
+    }
+  }
+
+  @keyframes luxury-pulse {
+    0%, 100% { box-shadow: 0 6px 12px rgba(52, 199, 89, 0.15); }
+    50% { box-shadow: 0_10px_25px_rgba(52,199,89,0.3), 0 0 0 3px rgba(52,199,89,0.05); transform: scale(1.005); }
+  }
+
+  .apple-button-secondary {
+    @apply bg-[#E5E5EA]/80 backdrop-blur-md text-[#1D1D1F] font-bold rounded-xl px-5 py-3 active:scale-[0.98] transition-all duration-300 hover:bg-[#D1D1D6] disabled:opacity-50;
+    @apply relative transition-all duration-200 active:translate-y-[1px];
+    box-shadow: 
+      0 2px 4px -1px rgba(0, 0, 0, 0.05), 
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.2);
+  }
+
+  .apple-input {
+    @apply bg-[#F2F2F7]/50 backdrop-blur-sm border border-transparent rounded-xl px-4 py-3 focus:bg-white focus:border-[#007AFF]/20 focus:ring-4 focus:ring-[#007AFF]/5 outline-none transition-all duration-300 placeholder:text-[#86868B] text-[#1D1D1F] font-medium;
+  }
+
+  /* Siri-like Orb Animation */
+  .siri-orb {
+    @apply relative w-10 h-10 rounded-full overflow-hidden flex items-center justify-center;
+    background: linear-gradient(135deg, #00d2ff 0%, #9d6fff 50%, #ff00cc 100%);
+    box-shadow: 0 0 15px rgba(157, 111, 255, 0.3);
+  }
+
+  .siri-orb::before {
+    content: '';
+    @apply absolute inset-0 opacity-30;
+    background: radial-gradient(circle at center, white 0%, transparent 70%);
+    animation: siri-pulse 3s ease-in-out infinite;
+  }
+
+  @keyframes siri-pulse {
+    0%, 100% { transform: scale(0.9); opacity: 0.2; }
+    50% { transform: scale(1.1); opacity: 0.4; }
+  }
+
+  .siri-orb.listening {
+    animation: siri-listening 2s ease-in-out infinite;
+    box-shadow: 0 0 30px rgba(0, 210, 255, 0.4);
+  }
+
+  @keyframes siri-listening {
+    0%, 100% { filter: hue-rotate(0deg) brightness(1); transform: scale(1); }
+    50% { filter: hue-rotate(45deg) brightness(1.1); transform: scale(1.1); }
+  }
+
+  .total-display {
+    @apply font-display text-2xl md:text-3xl font-black tracking-[-0.03em] text-[#1D1D1F] leading-tight;
+    font-feature-settings: "tnum";
+  }
+
+  .apple-error-glow {
+    @apply border-2 border-[#FF3B30]/50;
+    animation: red-glow-blink 1.5s ease-in-out infinite;
+  }
+
+  .toast-error-glow {
+    @apply border-2 border-transparent;
+    animation: triple-red-blink 1.2s ease-in-out 3;
+  }
+
+  .toast-success-glow {
+    @apply border-2 border-transparent;
+    animation: triple-blue-blink 1.2s ease-in-out 3;
+  }
+
+  .screen-flash-overlay {
+    @apply fixed inset-0 pointer-events-none z-[9999] border-[12px] border-transparent;
+  }
+
+  .screen-flash-error {
+    animation: screen-edge-glow-red 1.5s ease-in-out 3;
+  }
+
+  .screen-flash-warning {
+    animation: screen-edge-glow-red 1.5s ease-in-out 3;
+  }
+
+  .screen-flash-success {
+    animation: screen-edge-glow-blue 1.5s ease-in-out 3;
+  }
+}
+
+@keyframes screen-edge-glow-red {
+  0%, 33%, 66%, 100% {
+    box-shadow: inset 0 0 0 0 rgba(255, 59, 48, 0);
+    border-color: rgba(255, 59, 48, 0);
+  }
+  16%, 50%, 83% {
+    box-shadow: inset 0 0 60px 20px rgba(255, 59, 48, 0.5);
+    border-color: rgba(255, 59, 48, 0.8);
+  }
+}
+
+@keyframes screen-edge-glow-blue {
+  0%, 33%, 66%, 100% {
+    box-shadow: inset 0 0 0 0 rgba(0, 122, 255, 0);
+    border-color: rgba(0, 122, 255, 0);
+  }
+  16%, 50%, 83% {
+    box-shadow: inset 0 0 100px 40px rgba(0, 122, 255, 0.7);
+    border-color: rgba(0, 122, 255, 1);
+  }
+}
+
+@keyframes triple-blue-blink {
+  0%, 33%, 66%, 100% {
+    box-shadow: 0 0 0 0 rgba(0, 122, 255, 0);
+    border-color: rgba(0, 122, 255, 0.1);
+    transform: scale(1);
+  }
+  16%, 50%, 83% {
+    box-shadow: 0 0 40px 12px rgba(0, 122, 255, 0.7), inset 0 0 20px rgba(0, 122, 255, 0.4);
+    border-color: rgba(0, 122, 255, 1);
+    transform: scale(1.02);
+  }
+}
+
+@keyframes red-glow-blink {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(255, 59, 48, 0);
+    border-color: rgba(255, 59, 48, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 15px 5px rgba(255, 59, 48, 0.4), inset 0 0 10px rgba(255, 59, 48, 0.2);
+    border-color: rgba(255, 59, 48, 1);
+  }
+}
+
+@keyframes triple-red-blink {
+  0%, 33%, 66%, 100% {
+    box-shadow: 0 0 0 0 rgba(255, 59, 48, 0);
+    border-color: rgba(255, 59, 48, 0.1);
+    transform: scale(1);
+  }
+  16%, 50%, 83% {
+    box-shadow: 0 0 40px 12px rgba(255, 59, 48, 0.7), inset 0 0 20px rgba(255, 59, 48, 0.4);
+    border-color: rgba(255, 59, 48, 1);
+    transform: scale(1.02);
+  }
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  @apply bg-gray-200 rounded-full hover:bg-gray-300 transition-colors;
+}
+
+.luxury-bg-glow {
+  display: none;
+}
+
+/* Luxury 3D & Advanced UI Elements */
+.luxury-3d-card {
+  @apply bg-white/90 backdrop-blur-xl rounded-[28px] border border-white/40 shadow-[0_10px_30px_-10px_rgba(0,0,0,0.08)];
+  box-shadow: 
+    0 10px 30px -10px rgba(0, 0, 0, 0.08),
+    0 4px 10px -4px rgba(0, 0, 0, 0.04),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.8);
+}
+
+.toggle-slot-inner {
+  @apply rounded-full bg-[#E5E5EA]/40 overflow-hidden relative;
+  box-shadow: 
+    inset 0 4px 12px rgba(0, 0, 0, 0.08),
+    inset 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.brushed-aluminum {
+  background: linear-gradient(135deg, #f5f5f7 0%, #d1d1d6 50%, #f5f5f7 100%);
+  @apply shadow-[inset_0_1px_0_rgba(255,255,255,0.4)];
+}
+
+.frosted-glass-lux {
+  @apply bg-white/20 backdrop-blur-[8px] border border-white/30;
+}
+
+.mesh-gradient-luxury {
+  background: linear-gradient(135deg, #007AFF 0%, #5856D6 50%, #FF2D55 100%);
+  background-size: 200% 200%;
+  animation: mesh-gradient-move 4s infinite alternate ease-in-out;
+}
+
+@keyframes mesh-gradient-move {
+  0% { background-position: 0% 0%; }
+  100% { background-position: 100% 100%; }
+}
+
+.neon-glow-ring {
+  @apply absolute -inset-[2px] rounded-full opacity-0 pointer-events-none transition-opacity duration-500;
+  border: 1.5px solid rgba(0, 122, 255, 0.5);
+  box-shadow: 0 0 15px rgba(0, 122, 255, 0.4);
+}
+
+.overstock-active .neon-glow-ring {
+  @apply opacity-100;
+  animation: neon-pulse-luxury 2s infinite ease-in-out;
+}
+
+@keyframes neon-pulse-luxury {
+  0%, 100% { transform: scale(1); opacity: 0.4; }
+  50% { transform: scale(1.05); opacity: 0.8; }
+}
+
+@keyframes luxury-float {
+  0% { transform: translate(0, 0) scale(1) rotate(0deg); }
+  33% { transform: translate(10%, -10%) scale(1.2) rotate(10deg); }
+  66% { transform: translate(-5%, 15%) scale(0.9) rotate(-5deg); }
+  100% { transform: translate(0, 0) scale(1) rotate(0deg); }
+}
+
+.markdown-body p {
+  @apply mb-4 last:mb-0;
+}
+
+.markdown-body strong {
+  @apply font-black text-black;
+}
+
+/* AI Speak To Sale Button - Ultra Smooth Hardware-Accelerated Animation */
+.ai-speak-btn {
+  background: linear-gradient(135deg, #007AFF 0%, #6366F1 50%, #8B5CF6 100%);
+  background-size: 200% 200%;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, box-shadow;
+  box-shadow: 
+    0 4px 14px rgba(99, 102, 241, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.ai-speak-btn:hover {
+  background-position: 100% 100%;
+  box-shadow: 
+    0 6px 20px rgba(99, 102, 241, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  transform: translateY(-1px);
+}
+
+.ai-speak-btn:active {
+  transform: scale(0.98);
+}
+
+.ai-speak-btn-listening {
+  background: linear-gradient(135deg, #007AFF 0%, #8B5CF6 25%, #EC4899 50%, #06B6D4 75%, #007AFF 100%);
+  background-size: 300% 300%;
+  animation: ai-smooth-glow 4s ease-in-out infinite alternate;
+  will-change: background-position, box-shadow;
+  box-shadow: 
+    0 0 20px rgba(139, 92, 246, 0.45),
+    0 0 35px rgba(0, 122, 255, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+@keyframes ai-smooth-glow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Sound wave equalizer bars for listening state - 60fps pure CSS */
+.ai-wave-bar {
+  display: inline-block;
+  width: 3px;
+  background-color: #ffffff;
+  border-radius: 9999px;
+  transform-origin: bottom;
+  animation: ai-wave 1.2s ease-in-out infinite alternate;
+}
+.ai-wave-bar:nth-child(1) { height: 10px; animation-delay: 0.1s; }
+.ai-wave-bar:nth-child(2) { height: 18px; animation-delay: 0.35s; }
+.ai-wave-bar:nth-child(3) { height: 14px; animation-delay: 0.2s; }
+.ai-wave-bar:nth-child(4) { height: 8px; animation-delay: 0.45s; }
+
+@keyframes ai-wave {
+  0% { transform: scaleY(0.4); opacity: 0.7; }
+  100% { transform: scaleY(1.1); opacity: 1; }
+}
+
